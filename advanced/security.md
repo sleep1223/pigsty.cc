@@ -19,11 +19,11 @@ Pigsty 默认就开启了大多数安全选项，但生产上线前建议逐项�
 
 Pigsty 内置自签 CA，启用 TLS：
 
-```yaml
+```yaml [pigsty.yml]
 vars:
   pg_ssl: true
   pg_default_hba_rules:
-    - { user: all, db: all, addr: all,  auth: scram-sha-256 }
+    - { user: all, db: all, addr: all, auth: scram-sha-256 }
 ```
 
 客户端连接串加 `sslmode=require`。
@@ -44,7 +44,7 @@ vars:
 
 开启审计扩展：
 
-```yaml
+```yaml [pigsty.yml]
 pg_extensions:
   - { name: pgaudit }
 pg_parameters:
@@ -64,7 +64,7 @@ CREATE POLICY tenant_isolation ON orders USING (tenant_id = current_setting('app
 
 pgBackRest 支持 AES-256 加密：
 
-```yaml
+```yaml [pigsty.yml]
 pgbackrest_cipher_type: aes-256-cbc
 pgbackrest_cipher_pass: '<strong-random>'
 ```

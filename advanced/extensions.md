@@ -31,7 +31,7 @@ Pigsty 的一大亮点是 **340+ 预编译 PostgreSQL 扩展** —— 覆盖你�
 
 **在 `pigsty.yml` 声明**：
 
-```yaml
+```yaml [pigsty.yml]
 pg_databases:
   - name: app_main
     extensions:

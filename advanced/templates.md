@@ -52,7 +52,7 @@ Pigsty 在 `conf/` 目录下提供大量现成模板 —— 直接 `cp conf/xxx.
 
 ## 选模板的思路
 
-```
+```text
 你有几台机器？
 ├── 1 台 → meta / rich / fat / slim
 ├── 2 台 → dual

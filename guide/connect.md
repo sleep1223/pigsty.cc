@@ -35,8 +35,8 @@ psql "postgres://dbuser_ro:password@10.10.10.10:5434/app_main"
 ## 应用程序连接串
 
 **Java / HikariCP**：
-```properties
-jdbc:postgresql://pg-meta:5433/app_main
+```properties [hikari.properties]
+jdbc.url=jdbc:postgresql://pg-meta:5433/app_main
 db.user=dbuser_app
 db.password=********
 ```
@@ -53,7 +53,7 @@ new Pool({ host: 'pg-meta', port: 5433, user: 'dbuser_app', database: 'app_main'
 
 推荐在应用端连 `pgBouncer`（端口 **6432**）以获得连接复用：
 
-```
+```text
 postgres://dbuser_app:***@pg-meta:6432/app_main
 ```
 
@@ -69,7 +69,7 @@ Pigsty 默认把集群名（如 `pg-meta`）注册到内置 DNS，指向 VIP。�
 
 为避免在命令行裸露密码，可写入 `~/.pgpass`：
 
-```
+```text [~/.pgpass]
 10.10.10.10:5433:app_main:dbuser_app:password
 ```
 

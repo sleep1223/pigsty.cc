@@ -16,14 +16,15 @@ Pigsty 的思路是 —— 所有这些都通过声明式 YAML 配置 + 剧本�
 
 在 `pigsty.yml` 里找到你的 PG 集群段，例如 `pg-meta`。在 `pg_users` 下追加：
 
-```yaml
+```yaml [pigsty.yml] {7-9}
 pg-meta:
-  hosts: { 10.10.10.10: { pg_seq: 1, pg_role: primary } }
+  hosts:
+    10.10.10.10: { pg_seq: 1, pg_role: primary }
   vars:
     pg_cluster: pg-meta
     pg_users:
-      - { name: dbuser_app,  password: 'PleaseChangeMe', roles: [ dbrole_readwrite ] }
-      - { name: dbuser_ro,   password: 'PleaseChangeMe', roles: [ dbrole_readonly ] }
+      - { name: dbuser_app, password: 'PleaseChangeMe', roles: [ dbrole_readwrite ] }
+      - { name: dbuser_ro,  password: 'PleaseChangeMe', roles: [ dbrole_readonly  ] }
 ```
 
 内置角色（推荐使用）：
@@ -48,7 +49,7 @@ pg-meta:
 
 类似地，在集群的 `pg_databases` 下添加：
 
-```yaml
+```yaml [pigsty.yml]
     pg_databases:
       - name: app_main
         owner: dbuser_app
@@ -70,7 +71,7 @@ PostgreSQL 参数通过 `pg_conf` 模板 + `pg_parameters` 覆盖层控制。
 
 **临时改几个参数** —— 在集群 `vars` 下加：
 
-```yaml
+```yaml [pigsty.yml]
     pg_parameters:
       shared_buffers: 8GB
       max_connections: 500
@@ -79,15 +80,18 @@ PostgreSQL 参数通过 `pg_conf` 模板 + `pg_parameters` 覆盖层控制。
 
 **选用不同调优模板**：
 
-```yaml
+```yaml [pigsty.yml]
     pg_conf: olap.yml   # 默认 oltp.yml，可选 olap.yml / crit.yml / tiny.yml
 ```
 
 执行：
 
 ```bash
-./pgsql-config.yml -l pg-meta    # 重新生成 postgresql.conf
-./pgsql-reload.yml -l pg-meta    # 热加载（部分参数需重启）
+# 重新生成 postgresql.conf
+./pgsql-config.yml -l pg-meta
+
+# 热加载（部分参数需重启）
+./pgsql-reload.yml -l pg-meta
 ```
 
 ---

@@ -9,12 +9,20 @@ description: 一条命令在 Linux 上部署 Pigsty
 
 在一台 Linux 机器上执行：
 
-```bash
+```bash [install.sh]
+# 1. 下载并解压 Pigsty 源码
 curl -fsSL https://repo.pigsty.cc/get | bash -s v4.2.2
+
 cd ~/pigsty
-./bootstrap   # 安装 Ansible 依赖
-./configure   # 生成配置
-./install.yml # 执行安装剧本
+
+# 2. 安装 Ansible 与依赖
+./bootstrap
+
+# 3. 基于默认规则生成 pigsty.yml
+./configure
+
+# 4. 执行安装剧本
+./install.yml
 ```
 
 大约 5-10 分钟后，Pigsty 启动完成。默认组件：
@@ -42,12 +50,14 @@ Pigsty 提供开箱即用的基础设施模板：
 
 ## 验证安装
 
-```bash
+```bash [verify.sh]
 # 查看服务
 systemctl status patroni pgbouncer
-# 连接数据库
+
+# 本地 Unix socket 连接（最快）
 psql -h /var/run/postgresql -U dbuser_dba postgres -c '\l'
-# 或用 TCP
+
+# 或走 TCP
 psql "postgres://dbuser_dba@127.0.0.1/postgres"
 ```
 

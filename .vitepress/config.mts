@@ -86,6 +86,17 @@ export default defineConfig({
   lastUpdated: true,
   ignoreDeadLinks: true,
 
+  markdown: {
+    theme: { light: 'github-light', dark: 'github-dark' },
+    lineNumbers: true,
+    languageAlias: {
+      promql: 'bash',
+      prometheus: 'yaml',
+      haproxy: 'ini',
+      math: 'text',
+    },
+  },
+
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
@@ -134,13 +145,57 @@ export default defineConfig({
       link: '/en/',
       themeConfig: {
         nav: [
-          { text: 'Intro', link: '/en/' },
+          { text: 'Intro', link: '/en/intro/', activeMatch: '^/en/intro/' },
+          { text: 'Guide', link: '/en/guide/', activeMatch: '^/en/guide/' },
+          { text: 'Advanced', link: '/en/advanced/', activeMatch: '^/en/advanced/' },
+          { text: 'Modules', link: '/en/modules/', activeMatch: '^/en/modules/' },
+          { text: 'Reference', link: '/en/reference/', activeMatch: '^/en/reference/' },
         ],
         sidebar: {
-          '/en/': [
-            { text: 'English docs', link: '/en/' },
+          '/en/intro/': [
+            { text: 'Meet Pigsty', link: '/en/intro/' },
+            { text: 'Features', link: '/en/intro/features' },
+            { text: 'Use Cases', link: '/en/intro/scenarios' },
+            { text: 'Comparison', link: '/en/intro/compare' },
+          ],
+          '/en/guide/': [
+            { text: 'Overview', link: '/en/guide/' },
+            { text: 'Install', link: '/en/guide/install' },
+            { text: 'Configure', link: '/en/guide/config' },
+            { text: 'Connect', link: '/en/guide/connect' },
+            { text: 'Backup & Restore', link: '/en/guide/backup' },
+            { text: 'Monitor', link: '/en/guide/monitor' },
+          ],
+          '/en/advanced/': [
+            { text: 'Overview', link: '/en/advanced/' },
+            { text: 'Production Deployment', link: '/en/advanced/deploy' },
+            { text: 'HA Architecture', link: '/en/advanced/ha' },
+            { text: 'Security Hardening', link: '/en/advanced/security' },
+            { text: 'Config Templates', link: '/en/advanced/templates' },
+            { text: 'Extension Management', link: '/en/advanced/extensions' },
+          ],
+          '/en/modules/': [
+            { text: 'Module Overview', link: '/en/modules/' },
+            { text: '(Module deep-dives are in Chinese; see /docs/)', link: '/docs/' },
+          ],
+          '/en/reference/': [
+            { text: 'Reference', link: '/en/reference/' },
           ],
         },
+        editLink: {
+          pattern: 'https://github.com/sleep1223/pigsty.cc/edit/main/:path',
+          text: 'Edit this page on GitHub',
+        },
+        footer: {
+          message: 'Released under the AGPL 3.0 License',
+          copyright: 'Copyright © 2018-present Pigsty',
+        },
+        outline: { level: [2, 3], label: 'On this page' },
+        docFooter: { prev: 'Previous', next: 'Next' },
+        lastUpdatedText: 'Last updated',
+        darkModeSwitchLabel: 'Appearance',
+        returnToTopLabel: 'Return to top',
+        sidebarMenuLabel: 'Menu',
       },
     },
   },

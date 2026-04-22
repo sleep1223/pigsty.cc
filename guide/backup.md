@@ -19,7 +19,7 @@ Pigsty 默认支持三种仓库位置：
 
 在 `pigsty.yml` 中切换：
 
-```yaml
+```yaml [pigsty.yml]
 vars:
   pgbackrest_method: minio    # local | minio | s3
 ```
@@ -51,7 +51,7 @@ sudo -iu postgres pgbackrest --stanza=<cluster> backup --type=full
 
 Pigsty 默认配置了定时备份 —— 每周一次全量、每天一次增量。策略由 `pg_backup_crontab` 控制，默认：
 
-```yaml
+```yaml [pigsty.yml]
 pg_backup_crontab:
   - '00 01 * * 0  postgres pg-backup --full'  # 每周日 1 点全量
   - '00 01 * * 1-6 postgres pg-backup'        # 其他日增量
@@ -59,7 +59,7 @@ pg_backup_crontab:
 
 保留策略：
 
-```yaml
+```yaml [pigsty.yml]
 pgbackrest_repo:
   local:
     path: /pg/backup
