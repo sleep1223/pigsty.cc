@@ -100,6 +100,7 @@ export default defineConfig({
   title: 'Pigsty',
   description: '开箱即用、本地优先的 PostgreSQL 发行版 —— 开源 RDS 替代方案',
   lang: 'zh-CN',
+  base: '/pigsty.cc/',
   cleanUrls: true,
   lastUpdated: true,
   ignoreDeadLinks: true,
