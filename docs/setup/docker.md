@@ -311,6 +311,7 @@ make purge        # 删除容器并清空数据（会提示确认）
 
 ## 更多
 
+- **Docker 入门 / 学习路径**：[**Docker**](/docker/) —— 多容器集群、扩缩容、主从切换
 - **Docker Hub**：https://hub.docker.com/r/pgsty/pigsty
 - **源码目录**：https://github.com/pgsty/pigsty/tree/main/docker
 - **快速上手**：[**原生 Linux 安装**](/docs/setup/install/)

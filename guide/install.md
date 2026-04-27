@@ -37,9 +37,40 @@ cd ~/pigsty
 | 模式 | 适用场景 | 进一步阅读 |
 | --- | --- | --- |
 | **标准安装** | 单机 / 沙箱 / 小规模生产 | [单机安装](/docs/setup/install) |
+| **Docker 安装** | macOS / Windows 体验、本地学习 | [Docker 入门](/docker/) |
 | **离线安装** | 无公网环境、国产化 | [离线模式](/docs/setup/offline) |
 | **精简安装** | 只要 PostgreSQL，不要完整监控栈 | [精简模式](/docs/setup/slim) |
 | **多节点部署** | 生产级 HA 集群 | [高级 → 生产部署](/advanced/deploy) |
+
+### Docker 安装步骤
+
+如果你在 **macOS / Windows** 上没有原生 Linux 环境，或者只是想 **快速体验一下** Pigsty，
+可以用官方 Docker 镜像，三条命令即可拉起一套带 systemd 的完整单机：
+
+```bash [docker.sh]
+# 1. 下载源码（也可以直接 git clone）
+curl -fsSL https://repo.pigsty.cc/get | bash -s v4.2.2 && cd ~/pigsty/docker
+
+# 2. 一键启动：拉起容器 → 生成配置 → 执行部署
+make launch
+
+# 3. 查看自动生成的密码
+make pass | grep -E 'grafana_admin_password|pg_admin_password'
+```
+
+启动后默认端口映射如下：
+
+| 端口 | 用途 |
+| --- | --- |
+| `2222` | SSH（`ssh root@localhost -p 2222`，密码 `pigsty`） |
+| `8080` | Nginx / Pigsty Web 入口 |
+| `8443` | Nginx HTTPS |
+| `5432` | PostgreSQL（`psql 'postgres://dbuser_dba:<pass>@localhost:5432/postgres'`） |
+
+只想看部署是否能跑通而不想等下载？把 `make launch` 拆成 `make up && make exec`，然后手工执行 `./deploy.yml`。
+
+> 拉起容器之后的 **学习路径、扩缩容、主从同步等** 都集中在 [Docker](/docker/) 这一节。
+> 容器环境不适合生产，用法参考 [Docker 部署细则](/docs/setup/docker)。
 
 ## 通过 Vagrant / Terraform 准备机器
 

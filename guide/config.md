@@ -23,8 +23,8 @@ pg-meta:
   vars:
     pg_cluster: pg-meta
     pg_users:
-      - { name: dbuser_app, password: 'PleaseChangeMe', roles: [ dbrole_readwrite ] }
-      - { name: dbuser_ro,  password: 'PleaseChangeMe', roles: [ dbrole_readonly  ] }
+      - { name: dbuser_app, password: 'PleaseChangeMe', roles: [ dbrole_readwrite ], pgbouncer: true }
+      - { name: dbuser_ro,  password: 'PleaseChangeMe', roles: [ dbrole_readonly  ], pgbouncer: true }
 ```
 
 内置角色（推荐使用）：
@@ -36,11 +36,13 @@ pg-meta:
 | `dbrole_admin` | DDL + 读写 |
 | `dbrole_offline` | 分析 / 报表专用，通常导到只读副本 |
 
-执行变更：
+`pgbouncer: true` 表示把该用户加入 PgBouncer 连接池的认证名单，业务即可通过 6432 端口走连接池接入。
+
+执行变更，通过 `-e username=` 指定要创建的用户名：
 
 ```bash
-# 创建新增加的用户
-./pgsql-user.yml -l pg-meta
+# 创建新增加的用户（Docker 部署时集群名为 pgsql）
+./pgsql-user.yml -l pg-meta -e username=dbuser_fas
 ```
 
 ---
@@ -57,15 +59,26 @@ pg-meta:
         comment: 主业务库
 ```
 
-执行：
+执行，通过 `-e dbname=` 指定要创建的数据库名：
 
 ```bash
-./pgsql-db.yml -l pg-meta
+# 创建新增加的数据库（Docker 部署时集群名为 pgsql）
+./pgsql-db.yml -l pg-meta -e dbname=db_fas
 ```
 
 ---
 
 ## 修改实例参数
+
+入门最快的方式 —— 使用 Patroni 的命令行直接编辑集群参数：
+
+```bash
+# 打开编辑器修改集群参数，保存后会自动下发到所有成员，必要时滚动重启
+pg edit-config pg-meta     # Docker 部署集群名为 pgsql：pg edit-config pgsql
+```
+
+它适合临时调整、试验性改参；保存后改动只存在于 Patroni DCS 中，不会回写 `pigsty.yml`。
+如果想让配置长期可复现，仍建议通过下面的声明式方式管理。
 
 PostgreSQL 参数通过 `pg_conf` 模板 + `pg_parameters` 覆盖层控制。
 
@@ -92,6 +105,10 @@ PostgreSQL 参数通过 `pg_conf` 模板 + `pg_parameters` 覆盖层控制。
 
 # 热加载（部分参数需重启）
 ./pgsql-reload.yml -l pg-meta
+
+# 重启使需要重启的参数生效（滚动重启，先从库后主库）
+pg restart pg-meta --pending      # 只重启被标记为 pending restart 的实例
+# 或全量重启：pg restart pg-meta
 ```
 
 ---

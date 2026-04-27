@@ -64,16 +64,34 @@ const modulesSidebar = [
   ]},
 ]
 
-// 参考
+// Docker —— 本地学习专用入口
+const dockerSidebar = [
+  { text: 'Docker 入门', link: '/docker/' },
+  { text: '相关阅读', collapsed: false, items: [
+    { text: '安装：Docker 步骤', link: '/guide/install#docker-安装步骤' },
+    { text: '入门：常用命令速查', link: '/guide/#常用命令速查' },
+    { text: '高可用架构', link: '/advanced/ha' },
+    { text: '模块：DOCKER', link: '/docs/docker/' },
+    { text: '部署细则：Docker', link: '/docs/setup/docker' },
+  ]},
+]
+
+// 参考 —— 按用途分组：先"日常查"，再"安装/部署细则"，最后"背景资料"
 const referenceSidebar = [
   { text: '参考概览', link: '/reference/' },
-  sectionGroup('ref', '参考手册'),
-  sectionGroup('conf', '配置模板库'),
-  sectionGroup('repo', '软件源'),
-  sectionGroup('about', '关于 Pigsty'),
-  sectionGroup('concept', '核心概念'),
-  sectionGroup('setup', '安装细则'),
-  sectionGroup('deploy', '部署细则'),
+  { text: '日常速查', collapsed: false, items: [
+    sectionGroup('ref', '参考手册'),
+    sectionGroup('conf', '配置模板库'),
+    sectionGroup('repo', '软件源'),
+  ]},
+  { text: '安装与部署细则', collapsed: false, items: [
+    sectionGroup('setup', '安装细则'),
+    sectionGroup('deploy', '部署细则'),
+  ]},
+  { text: '背景资料', collapsed: true, items: [
+    sectionGroup('concept', '核心概念'),
+    sectionGroup('about', '关于 Pigsty'),
+  ]},
 ]
 
 // ---------------- 配置 ----------------
@@ -111,6 +129,7 @@ export default defineConfig({
         nav: [
           { text: '介绍', link: '/intro/', activeMatch: '^/intro/' },
           { text: '入门', link: '/guide/', activeMatch: '^/guide/' },
+          { text: 'Docker', link: '/docker/', activeMatch: '^/docker/' },
           { text: '高级', link: '/advanced/', activeMatch: '^/advanced/' },
           { text: '模块', link: '/modules/', activeMatch: '^/(modules|docs)/' },
           { text: '参考', link: '/reference/', activeMatch: '^/reference/' },
@@ -118,6 +137,7 @@ export default defineConfig({
         sidebar: {
           '/intro/': introSidebar,
           '/guide/': guideSidebar,
+          '/docker/': dockerSidebar,
           '/advanced/': advancedSidebar,
           '/modules/': modulesSidebar,
           '/docs/': modulesSidebar,

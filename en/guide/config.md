@@ -23,8 +23,8 @@ pg-meta:
   vars:
     pg_cluster: pg-meta
     pg_users:
-      - { name: dbuser_app, password: 'PleaseChangeMe', roles: [ dbrole_readwrite ] }
-      - { name: dbuser_ro,  password: 'PleaseChangeMe', roles: [ dbrole_readonly  ] }
+      - { name: dbuser_app, password: 'PleaseChangeMe', roles: [ dbrole_readwrite ], pgbouncer: true }
+      - { name: dbuser_ro,  password: 'PleaseChangeMe', roles: [ dbrole_readonly  ], pgbouncer: true }
 ```
 
 Built-in roles (recommended):
@@ -36,11 +36,13 @@ Built-in roles (recommended):
 | `dbrole_admin`      | DDL + read / write                                   |
 | `dbrole_offline`    | Analytics / reporting; usually routed to replicas    |
 
-Apply the change:
+`pgbouncer: true` adds the user to PgBouncer's auth list so apps can connect through the pooler on port 6432.
+
+Apply the change — pass `-e username=` to target the user to create:
 
 ```bash
-# Create the newly added users
-./pgsql-user.yml -l pg-meta
+# Create the newly added user (use cluster name `pgsql` for Docker deployments)
+./pgsql-user.yml -l pg-meta -e username=dbuser_fas
 ```
 
 ---
@@ -59,15 +61,26 @@ Similarly, append to the cluster's `pg_databases`:
         comment: Main business database
 ```
 
-Apply:
+Apply — pass `-e dbname=` to target the database to create:
 
 ```bash
-./pgsql-db.yml -l pg-meta
+# Create the newly added database (use cluster name `pgsql` for Docker deployments)
+./pgsql-db.yml -l pg-meta -e dbname=db_fas
 ```
 
 ---
 
 ## Tune instance parameters
+
+The fastest way to get started — edit cluster parameters via Patroni's CLI:
+
+```bash
+# Open an editor on the cluster config; on save it propagates to all members and rolls restart if needed
+pg edit-config pg-meta     # Docker deployment uses cluster name `pgsql`: pg edit-config pgsql
+```
+
+Good for ad-hoc tweaks and experiments; the change lives in Patroni's DCS only and is **not** written back to `pigsty.yml`.
+For reproducible, long-term configuration, prefer the declarative approach below.
 
 PostgreSQL parameters are governed by the `pg_conf` template plus the `pg_parameters` override layer.
 
@@ -94,6 +107,10 @@ Apply:
 
 # Hot-reload (some parameters still need a restart)
 ./pgsql-reload.yml -l pg-meta
+
+# Restart to apply parameters that require it (rolling: replicas first, then primary)
+pg restart pg-meta --pending      # only restart instances marked as pending-restart
+# Or restart all members: pg restart pg-meta
 ```
 
 ---
